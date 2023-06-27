@@ -246,7 +246,7 @@ GOOGL_data <-function(train_table1,train_table2,train_table3,train_table4,train_
   fitting_train_factors_GOOGL(train_table4)
   fitting_train_factors_GOOGL(train_table5)
   fitting_train_factors_GOOGL(train_table6)
-
+  
 }
 GOOGL_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6)
 
@@ -258,7 +258,7 @@ VZ_data <-function(train_table1,train_table2,train_table3,train_table4,train_tab
   fitting_train_factors_VZ(train_table5)
   fitting_train_factors_VZ(train_table6)
   
- 
+  
 }
 VZ_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6)
 

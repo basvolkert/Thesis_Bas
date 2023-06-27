@@ -1,38 +1,45 @@
-library(quantmod)
+# load CSV file in to R
+ff_data <- read.table("ff_data.csv",header=TRUE, sep=",")
 
-# Definieer de assets en factor tickers
-asset <- c("MSFT")
-factor_tickers <- c("IWSZ.L", "IWVL.L", "IWMO.L", "IWQU.L", "VT")
+# Spliting the data in Train an Test
+estimation_window <- 120
+gap <- 10
+train_data <- ff_data[1:estimation_window, ]
+test_data <- ff_data[(estimation_window + gap +1):nrow(ff_data), ]
 
-# Definieer de start- en einddatums als een `Date`-object
-start_date <- as.Date("2022-05-11")
-end_date <- as.Date("2022-12-30")
+# Extracting Fama-French Factors and Returns for the CSV file
+train_rmrf <- train_data[,2]
+train_smb <- train_data[,3]
+train_hml <- train_data[,4]
+train_rmw <- train_data[,5]
+train_cma <- train_data[,6]
+train_rf <- train_data[,7]
+train_fund <- train_data[,8]
 
-# Functie om dagelijkse rendementen te berekenen en naam te geven
-calculate_daily_returns <- function(symbol, start_date, end_date) {
-  # Haal de historische prijsgegevens op
-  data <- getSymbols(symbol, from = start_date, to = end_date, auto.assign = FALSE)
-  
-  # Bereken dagelijkse rendementen
-  returns <- dailyReturn(data, type = "log")
-  
-  # Geef het resultaat een naam met de ticker
-  colnames(returns) <- paste0("daily_return_", symbol)
-  
-  # Geef het resultaat terug
-  return(returns)
-}
+# Extracting Fama-French Factors and Returns for the CSV file
+test_rmrf <- test_data[,2]
+test_smb <- test_data[,3]
+test_hml <- test_data[,4]
+test_rmw <- test_data[,5]
+test_cma <- test_data[,6]
+test_rf <- test_data[,7]
+test_fund <- test_data[,8]
 
-# Bereken dagelijkse rendementen voor de asset
-asset_returns <- calculate_daily_returns(asset, start_date, end_date)
+#Calculate Excess Returns of Target fund
+train_Fund.xcess <- train_fund - train_rf
 
-# Bereken dagelijkse rendementen voor de factor tickers
-factor_returns <- lapply(factor_tickers, function(ticker) {
-  calculate_daily_returns(ticker, start_date, end_date)
-})
+#Calculate Excess Returns of Target fund
+test_Fund.xcess <- test_fund - test_rf
 
-# Combineer de dagelijkse rendementen in één dataset
-returns_data <- cbind(asset_returns, do.call(merge, factor_returns))
+# Run Fama-French Regression
 
-# Bekijk de resulterende dataset
-print(returns_data)
+train_regression <- lm(train_Fund.xcess ~ train_rmrf + train_smb + train_hml + train_rmw + train_cma)
+
+# Run Fama-French Regression
+test_regression <- lm(test_Fund.xcess ~ test_rmrf + test_smb + test_hml + test_rmw + test_cma)
+
+# Print summary of the regression results
+print(summary(train_regression))
+
+# Print summary of the regression results
+print(summary(test_regression))
