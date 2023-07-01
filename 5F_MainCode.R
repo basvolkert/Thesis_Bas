@@ -89,195 +89,114 @@ for (i in seq_along(test_tables)) {
 }
 
 # Function in order to assign the right factors for the Train data set
-fitting_train_factors_MSFT <- function(x){
-  train_rmrf <- x[,2]
-  train_smb <- x[,3]
-  train_hml <- x[,4]
-  train_rmw <- x[,5]
-  train_cma <- x[,6]
-  train_rf <- x[,7]
-  train_fund <- x[,8]
-  train_Fund.xcess <- train_fund - train_rf
-  train_regression <- lm(train_Fund.xcess ~ train_rmrf + train_smb + train_hml + train_rmw + train_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[8]
-  
+fitting_train_factors_MSFT <- function(train_table, test_table){
+  train_regression <- lm(MSFT - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
+  table_name <- deparse(substitute(train_table))
+  column_name <-names(train_table)[8]
   print(paste("train data of ",column_name, "of table", table_name))
-  print(summary(train_regression))
+  #print(summary(train_regression))
+  a <- predict(train_regression, test_table)
+  sum_a <- sum(a)
+  b <- sum(test_table$MSFT)
+  c <- b - sum_a 
+  print(paste("total predicted return of MSFT:", sum_a))
+  print(paste("total actual return of MSFT:", b))
+  print(paste("Actual - predicted return of MSFT:", c))
+  print(" ")
+  return(c)
 } 
-# Function in order to assign the right factors for the Test data set
-fitting_test_factors_MSFT <- function(x){
-  test_rmrf <- x[,2]
-  test_smb <- x[,3]
-  test_hml <- x[,4]
-  test_rmw <- x[,5]
-  test_cma <- x[,6]
-  test_rf <- x[,7]
-  test_fund <- x[,8]
-  test_Fund.xcess <- test_fund - test_rf
-  test_regression <- lm(test_Fund.xcess ~ test_rmrf + test_smb + test_hml + test_rmw + test_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[8]
-  
-  print(paste("test data of ",column_name, "of table", table_name))
-  print(summary(test_regression))
-}
 
 # Function in order to assign the right factors for the Train data set
-fitting_train_factors_GOOGL <- function(x){
-  train_rmrf <- x[,2]
-  train_smb <- x[,3]
-  train_hml <- x[,4]
-  train_rmw <- x[,5]
-  train_cma <- x[,6]
-  train_rf <- x[,7]
-  train_fund <- x[,9]
-  train_Fund.xcess <- train_fund - train_rf
-  train_regression <- lm(train_Fund.xcess ~ train_rmrf + train_smb + train_hml + train_rmw + train_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[9]
-  
+fitting_train_factors_GOOGL <- function(train_table, test_table){
+  train_regression <- lm(GOOGL - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
+  table_name <- deparse(substitute(train_table))
+  column_name <-names(train_table)[9]
   print(paste("train data of ",column_name, "of table", table_name))
-  print(summary(train_regression))
-}
-# Function in order to assign the right factors for the Test data set
-fitting_test_factors_GOOGL <- function(x){
-  test_rmrf <- x[,2]
-  test_smb <- x[,3]
-  test_hml <- x[,4]
-  test_rmw <- x[,5]
-  test_cma <- x[,6]
-  test_rf <- x[,7]
-  test_fund <- x[,9]
-  test_Fund.xcess <- test_fund - test_rf
-  test_regression <- lm(test_Fund.xcess ~ test_rmrf + test_smb + test_hml + test_rmw + test_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[9]
-  
-  print(paste("test data of ",column_name, "of table", table_name))
-  print(summary(test_regression))
-}
+  #print(summary(train_regression))
+  a <- predict(train_regression, test_table)
+  sum_a <- sum(a)
+  b <- sum(test_table$GOOGL)
+  c <- b - sum_a 
+  print(paste("total predicted return of GOOGL:", sum_a))
+  print(paste("total actual return of GOOGL:", b))
+  print(paste("Actual - predicted return of GOOGL:", c))
+  print(" ")
+  return(c)
+} 
 
 # Function in order to assign the right factors for the Train data set
-fitting_train_factors_VZ <- function(x){
-  train_rmrf <- x[,2]
-  train_smb <- x[,3]
-  train_hml <- x[,4]
-  train_rmw <- x[,5]
-  train_cma <- x[,6]
-  train_rf <- x[,7]
-  train_fund <- x[,10]
-  train_Fund.xcess <- train_fund - train_rf
-  train_regression <- lm(train_Fund.xcess ~ train_rmrf + train_smb + train_hml + train_rmw + train_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[10]
-  
+fitting_train_factors_VZ <- function(train_table, test_table){
+  train_regression <- lm(VZ - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
+  table_name <- deparse(substitute(train_table))
+  column_name <-names(train_table)[10]
   print(paste("train data of ",column_name, "of table", table_name))
-  print(summary(train_regression))
-}
-# Function in order to assign the right factors for the Test data set
-fitting_test_factors_VZ <- function(x){
-  test_rmrf <- x[,2]
-  test_smb <- x[,3]
-  test_hml <- x[,4]
-  test_rmw <- x[,5]
-  test_cma <- x[,6]
-  test_rf <- x[,7]
-  test_fund <- x[,10]
-  test_Fund.xcess <- test_fund - test_rf
-  test_regression <- lm(test_Fund.xcess ~ test_rmrf + test_smb + test_hml + test_rmw + test_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[10]
-  
-  print(paste("test data of ",column_name, "of table", table_name))
-  print(summary(test_regression))
-}
+  #print(summary(train_regression))
+  a <- predict(train_regression, test_table)
+  sum_a <- sum(a)
+  b <- sum(test_table$VZ)
+  c <- b - sum_a 
+  print(paste("total predicted return of VZ:", sum_a))
+  print(paste("total actual return of VZ:", b))
+  print(paste("Actual - predicted return of VZ:", c))
+  print(" ")
+  return(c)
+} 
 
 # Function in order to assign the right factors for the Train data set
-fitting_train_factors_BIDU <- function(x){
-  train_rmrf <- x[,2]
-  train_smb <- x[,3]
-  train_hml <- x[,4]
-  train_rmw <- x[,5]
-  train_cma <- x[,6]
-  train_rf <- x[,7]
-  train_fund <- x[,11]
-  train_Fund.xcess <- train_fund - train_rf
-  train_regression <- lm(train_Fund.xcess ~ train_rmrf + train_smb + train_hml + train_rmw + train_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[11]
-  
+fitting_train_factors_BIDU <- function(train_table, test_table){
+  train_regression <- lm(BIDU - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
+  table_name <- deparse(substitute(train_table))
+  column_name <-names(train_table)[11]
   print(paste("train data of ",column_name, "of table", table_name))
-  print(summary(train_regression))
-  return(train_regression)
+  #print(summary(train_regression))
+  a <- predict(train_regression, test_table)
+  sum_a <- sum(a)
+  b <- sum(test_table$BIDU)
+  c <- b - sum_a 
+  print(paste("total predicted return of BIDU:", sum_a))
+  print(paste("total actual return of BIDU:", b))
+  print(paste("Actual - predicted return of BIDU:", c))
+  print(" ")
+  return(c)
+} 
+
+MSFT_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
+  fitting_train_factors_MSFT(train_table1 ,test_table1)
+  fitting_train_factors_MSFT(train_table2, test_table2)
+  fitting_train_factors_MSFT(train_table3, test_table3)
+  fitting_train_factors_MSFT(train_table4, test_table4)
+  fitting_train_factors_MSFT(train_table5, test_table5)
+  fitting_train_factors_MSFT(train_table6, test_table6)
 }
-# Function in order to assign the right factors for the Test data set
-fitting_test_factors_BIDU <- function(x){
-  test_rmrf <- x[,2]
-  test_smb <- x[,3]
-  test_hml <- x[,4]
-  test_rmw <- x[,5]
-  test_cma <- x[,6]
-  test_rf <- x[,7]
-  test_fund <- x[,11]
-  test_Fund.xcess <- test_fund - test_rf
-  test_regression <- lm(test_Fund.xcess ~ test_rmrf + test_smb + test_hml + test_rmw + test_cma)
-  table_name <- deparse(substitute(x))
-  column_name <-names(x)[11]
-  
-  print(paste("test data of ",column_name, "of table", table_name))
-  print(summary(test_regression))
+MSFT_div <- MSFT_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
+
+GOOGL_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
+  fitting_train_factors_GOOGL(train_table1 ,test_table1)
+  fitting_train_factors_GOOGL(train_table2, test_table2)
+  fitting_train_factors_GOOGL(train_table3, test_table3)
+  fitting_train_factors_GOOGL(train_table4, test_table4)
+  fitting_train_factors_GOOGL(train_table5, test_table5)
+  fitting_train_factors_GOOGL(train_table6, test_table6)
 }
+GOOGL_div <- GOOGL_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 
-MSFT_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6){
-  fitting_train_factors_MSFT(train_table1)
-  fitting_train_factors_MSFT(train_table2)
-  fitting_train_factors_MSFT(train_table3)
-  fitting_train_factors_MSFT(train_table4)
-  fitting_train_factors_MSFT(train_table5)
-  fitting_train_factors_MSFT(train_table6)
+VZ_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
+  fitting_train_factors_VZ(train_table1 ,test_table1)
+  fitting_train_factors_VZ(train_table2, test_table2)
+  fitting_train_factors_VZ(train_table3, test_table3)
+  fitting_train_factors_VZ(train_table4, test_table4)
+  fitting_train_factors_VZ(train_table5, test_table5)
+  fitting_train_factors_VZ(train_table6, test_table6)
 }
-MSFT_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6)
+VZ_div <- VZ_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 
-GOOGL_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6){
-  fitting_train_factors_GOOGL(train_table1)
-  fitting_train_factors_GOOGL(train_table2)
-  fitting_train_factors_GOOGL(train_table3)
-  fitting_train_factors_GOOGL(train_table4)
-  fitting_train_factors_GOOGL(train_table5)
-  fitting_train_factors_GOOGL(train_table6)
-
+BIDU_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
+  fitting_train_factors_BIDU(train_table1 ,test_table1)
+  fitting_train_factors_BIDU(train_table2, test_table2)
+  fitting_train_factors_BIDU(train_table3, test_table3)
+  fitting_train_factors_BIDU(train_table4, test_table4)
+  fitting_train_factors_BIDU(train_table5, test_table5)
+  fitting_train_factors_BIDU(train_table6, test_table6)
 }
-GOOGL_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6)
+BIDU_div <- BIDU_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 
-VZ_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6){
-  fitting_train_factors_VZ(train_table1)
-  fitting_train_factors_VZ(train_table2)
-  fitting_train_factors_VZ(train_table3)
-  fitting_train_factors_VZ(train_table4)
-  fitting_train_factors_VZ(train_table5)
-  fitting_train_factors_VZ(train_table6)
-  
- 
-}
-VZ_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6)
-
-BIDU_data <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6){
-  fitting_train_factors_BIDU(train_table1)
-  fitting_train_factors_BIDU(train_table2)
-  fitting_train_factors_BIDU(train_table3)
-  fitting_train_factors_BIDU(train_table4)
-  fitting_train_factors_BIDU(train_table5)
-  fitting_train_factors_BIDU(train_table6)
-}
-BIDU_data(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6)
-
-
-
-
-
-######### testest #### chapter headers
-# header 2 ----
-# header 3 ====
-# testtest<- lm(train_Fund.xcess ~ train_rmrf + train_smb + train_hml + train_rmw + train_cma)
-# header 1 ####
