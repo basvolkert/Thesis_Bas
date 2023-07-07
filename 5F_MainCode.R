@@ -1,4 +1,8 @@
 library(quantmod)
+library(tidyquant)
+library(timetk)
+
+
 start_date <- "2022-05-11"
 end_date <- "2022-12-30"
 ranges <- data.frame (x = c(1,3,5,10,10,10),y = c(1,3,5,10,15,20))
@@ -101,7 +105,14 @@ for (i in seq_along(test_tables)) {
 # Function in order to assign the right factors for the Train data set
 fitting_train_factors_MSFT_5F <- function(train_table, test_table){
   train_regression_5F <- lm(MSFT - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
+  #train_regression_5F_alpha <- train_regression_5F$coefficients[1]
+  #train_regression_5F_beta <- train_regression_5F$coefficients[2]
   table_name <- deparse(substitute(train_table))
+  #print(train_regression_5F_alpha)
+  #print(train_regression_5F_beta)
+  
+  print(summary(train_regression_5F))
+  
   column_name <-names(train_table)[8]
   p <- predict(train_regression, test_table)
   a <- test_table$MSFT
@@ -112,17 +123,18 @@ fitting_train_factors_MSFT_5F <- function(train_table, test_table){
   return(ap)
 } 
 fitting_train_factors_MSFT_4F <- function(train_table, test_table){
-  train_regression <- lm(MSFT - RF ~ Mkt.RF + SMB + HML + RMW, train_table)
-  table_name <- deparse(substitute(train_table))
-  column_name <-names(train_table)[8]
-  p <- predict(train_regression, test_table)
-  a <- test_table$MSFT
-  sum_p <- sum(p)
-  sum_a <- sum(test_table$MSFT)
-  ap <-cbind(a, p)
-  
-  return(ap)
-}
+    train_regression <- lm(MSFT - RF ~ Mkt.RF + SMB + HML + RMW, train_table)
+    table_name <- deparse(substitute(train_table))
+    column_name <-names(train_table)[8]
+    print(summary(train_regression))
+    p <- predict(train_regression, test_table)
+    a <- test_table$MSFT
+    sum_p <- sum(p)
+    sum_a <- sum(test_table$MSFT)
+    ap <-cbind(a, p)
+    
+    return(ap)
+  }
 fitting_train_factors_MSFT_3F <- function(train_table, test_table){
   train_regression_5F <- lm(MSFT - RF ~ Mkt.RF + SMB + HML, train_table)
   table_name <- deparse(substitute(train_table))
@@ -150,19 +162,22 @@ fitting_train_factors_MSFT_F <- function(train_table, test_table){
 
 MSFT_data_5F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
-  R1 <- data.frame(fitting_train_factors_MSFT_5F(train_table1, test_table1))
-  R1$a_p <- (R1$a- R1$p)
-  var_ar <- var(R1$a_p)
-  CAR <- sum(R1$a_p)
-  t1 <- CAR^2/sqrt(var_ar*3)
-  pt1 <- pt(t1,2, lower.tail = FALSE)
+  #R1 <- data.frame(fitting_train_factors_MSFT_5F(train_table1, test_table1))
+  #R1$a_p <- (R1$a- R1$p)
+  #var_ar_r1 <- var(R1$a_p)
+  #CAR <- sum(R1$a_p)
+  #t1 <- CAR^2/sqrt(var_ar_r1*3)
+  #pt1 <- pt(t1,2, lower.tail = FALSE)
+  #print(R1$a_p)
+  #print(var_ar_r1)
   
-  R2 <- data.frame(fitting_train_factors_MSFT_5F(train_table2, test_table2))
-  R2$a_p <- (R2$a- R2$p)
-  var_ar <- var(R2$a_p)
-  CAR <- sum(R2$a_p)
-  t2 <- CAR^2/sqrt(var_ar*7)
-  pt2 <- pt(t2,6, lower.tail = FALSE)
+  #R2 <- data.frame(fitting_train_factors_MSFT_5F(train_table2, test_table2))
+  #R2$a_p <- (R2$a- R2$p)
+  #var_ar <- var(R2$a_p)
+  #CAR <- sum(R2$a_p)
+  #t2 <- CAR^2/sqrt(var_ar*7)
+  #pt2 <- pt(t2,6, lower.tail = FALSE)
+  #print(var_ar)
   
   R3 <- data.frame(fitting_train_factors_MSFT_5F(train_table3, test_table3))
   R3$a_p <- (R3$a- R3$p)
@@ -170,36 +185,40 @@ MSFT_data_5F <-function(train_table1,train_table2,train_table3,train_table4,trai
   CAR <- sum(R3$a_p)
   t3 <- CAR^2/sqrt(var_ar*11)
   pt3 <- pt(t3,10, lower.tail = FALSE)
+  print(var_ar)
   
-  R4 <- data.frame(fitting_train_factors_MSFT_5F(train_table4, test_table4))
-  R4$a_p <- (R4$a- R4$p)
-  var_ar <- var(R4$a_p)
-  CAR <- sum(R4$a_p)
-  t4 <- CAR^2/sqrt(var_ar*21)
-  pt4 <- pt(t4,20, lower.tail = FALSE)
+  #R4 <- data.frame(fitting_train_factors_MSFT_5F(train_table4, test_table4))
+  #R4$a_p <- (R4$a- R4$p)
+  #var_ar <- var(R4$a_p)
+  #CAR <- sum(R4$a_p)
+  #t4 <- CAR^2/sqrt(var_ar*21)
+  #pt4 <- pt(t4,20, lower.tail = FALSE)
+  #print(var_ar)
   
-  R5 <- data.frame(fitting_train_factors_MSFT_5F(train_table5, test_table5))
-  R5$a_p <- (R5$a- R5$p)
-  var_ar <- var(R5$a_p)
-  CAR <- sum(R5$a_p)
-  t5 <- CAR^2/sqrt(var_ar*26)
-  pt5 <- pt(t5,25, lower.tail = FALSE)
+  #R5 <- data.frame(fitting_train_factors_MSFT_5F(train_table5, test_table5))
+  #R5$a_p <- (R5$a- R5$p)
+  #var_ar <- var(R5$a_p)
+  #CAR <- sum(R5$a_p)
+  #t5 <- CAR^2/sqrt(var_ar*26)
+  #pt5 <- pt(t5,25, lower.tail = FALSE)
+  #print(var_ar)
   
-  R6 <- data.frame(fitting_train_factors_MSFT_5F(train_table6, test_table6))
-  R6$a_p <- (R6$a- R6$p)
-  var_ar <- var(R6$a_p)
-  CAR <- sum(R6$a_p)
-  t6 <- CAR^2/sqrt(var_ar*31)
-  pt6 <- pt(t6,30, lower.tail = FALSE)
+  #R6 <- data.frame(fitting_train_factors_MSFT_5F(train_table6, test_table6))
+  #R6$a_p <- (R6$a- R6$p)
+  #var_ar <- var(R6$a_p)
+  #CAR <- sum(R6$a_p)
+  #t6 <- CAR^2/sqrt(var_ar*31)
+  #pt6 <- pt(t6,30, lower.tail = FALSE)
+  #print(var_ar)
   
   print("These are the values for 5 Factor model")
   
-  print(paste("MSFT:p-value 1", pt1))
-  print(paste("MSFT:p-value 2", pt2))
+  #print(paste("MSFT:p-value 1", pt1))
+  #print(paste("MSFT:p-value 2", pt2))
   print(paste("MSFT:p-value 3", pt3))
-  print(paste("MSFT:p-value 4", pt4))
-  print(paste("MSFT:p-value 5", pt5))
-  print(paste("MSFT:p-value 6", pt6))
+  #print(paste("MSFT:p-value 4", pt4))
+  #print(paste("MSFT:p-value 5", pt5))
+  #print(paste("MSFT:p-value 6", pt6))
 }
 MSFT_data_4F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
@@ -365,11 +384,13 @@ MSFT_div_F <- MSFT_data_F(train_table1,train_table2,train_table3,train_table4,tr
 
 
 
+
 #2.2 GOOGL 5 Factor lines ----
 # Function in order to assign the right factors for the Train data set
 fitting_train_factors_GOOGL_5F <- function(train_table, test_table){
   train_regression <- lm(GOOGL - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
   table_name <- deparse(substitute(train_table))
+  print(summary(train_regression))
   column_name <-names(train_table)[9]
   p <- predict(train_regression, test_table)
   sum_p <- sum(p)
@@ -630,12 +651,14 @@ GOOGL_div_F <- GOOGL_data_F(train_table1,train_table2,train_table3,train_table4,
 
 
 
+
 #2.3 VZ 5 Factor lines ----
 # Function in order to assign the right factors for the Train data set
 fitting_train_factors_VZ_5F <- function(train_table, test_table){
   train_regression <- lm(VZ - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[10]
+  print(summary(train_regression))
   p <- predict(train_regression, test_table)
   sum_p <- sum(p)
   a <- test_table$VZ
