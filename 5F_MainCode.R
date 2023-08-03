@@ -92,17 +92,13 @@ for (i in seq_along(test_tables)) {
   assign(table_name, table)
 }
 
-
-
-#2 Bigger lines of code  ----
-
-
 #2.1 MSFT 5 Factor lines ----
-# Function in order to assign the right factors for the Train data set
+# Function in order to assign the right factors for the Train data set; MSFT, 5 Factor
 fitting_train_factors_MSFT_5F <- function(train_table, test_table){
-  train_regression_5F <- lm(MSFT - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
+  train_regression <- lm(MSFT - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[8]
+  print(summary(train_regression_5F))
   p <- predict(train_regression, test_table)
   a <- test_table$MSFT
   sum_p <- sum(p)
@@ -111,11 +107,13 @@ fitting_train_factors_MSFT_5F <- function(train_table, test_table){
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; MSFT, 4 Factor
 fitting_train_factors_MSFT_4F <- function(train_table, test_table){
   train_regression <- lm(MSFT - RF ~ Mkt.RF + SMB + HML + RMW, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[8]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   a <- test_table$MSFT
   sum_p <- sum(p)
   sum_a <- sum(test_table$MSFT)
@@ -123,11 +121,13 @@ fitting_train_factors_MSFT_4F <- function(train_table, test_table){
   
   return(ap)
 }
+# Function in order to assign the right factors for the Train data set; MSFT, 3 Factor
 fitting_train_factors_MSFT_3F <- function(train_table, test_table){
-  train_regression_5F <- lm(MSFT - RF ~ Mkt.RF + SMB + HML, train_table)
+  train_regression <- lm(MSFT - RF ~ Mkt.RF + SMB + HML, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[8]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   a <- test_table$MSFT
   sum_p <- sum(p)
   sum_a <- sum(test_table$MSFT)
@@ -135,11 +135,13 @@ fitting_train_factors_MSFT_3F <- function(train_table, test_table){
   
   return(ap)
 }
+# Function in order to assign the right factors for the Train data set; MSFT, CAPM
 fitting_train_factors_MSFT_F <- function(train_table, test_table){
-  train_regression_5F <- lm(MSFT - RF ~ Mkt.RF, train_table)
+  train_regression <- lm(MSFT - RF ~ Mkt.RF, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[8]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   a <- test_table$MSFT
   sum_p <- sum(p)
   sum_a <- sum(test_table$MSFT)
@@ -148,6 +150,7 @@ fitting_train_factors_MSFT_F <- function(train_table, test_table){
   return(ap)
 }
 
+# Function to calculate AR, CAR, t-value and P-value for 5 Factor
 MSFT_data_5F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_MSFT_5F(train_table1, test_table1))
@@ -201,6 +204,7 @@ MSFT_data_5F <-function(train_table1,train_table2,train_table3,train_table4,trai
   print(paste("MSFT:p-value 5", pt5))
   print(paste("MSFT:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for 4 Factor
 MSFT_data_4F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_MSFT_4F(train_table1, test_table1))
@@ -253,6 +257,7 @@ MSFT_data_4F <-function(train_table1,train_table2,train_table3,train_table4,trai
   print(paste("MSFT:p-value 5", pt5))
   print(paste("MSFT:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for 3 Factor
 MSFT_data_3F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_MSFT_3F(train_table1, test_table1))
@@ -305,6 +310,7 @@ MSFT_data_3F <-function(train_table1,train_table2,train_table3,train_table4,trai
   print(paste("MSFT:p-value 5", pt5))
   print(paste("MSFT:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for CAPM
 MSFT_data_F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_MSFT_F(train_table1, test_table1))
@@ -358,53 +364,60 @@ MSFT_data_F <-function(train_table1,train_table2,train_table3,train_table4,train
   print(paste("MSFT:t-value 6", pt6))
 }
 
+# Calling all four functions to received the P-values
 MSFT_div_5f <- MSFT_data_5F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 MSFT_div_4f <- MSFT_data_4F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 MSFT_div_3f <- MSFT_data_3F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 MSFT_div_F <- MSFT_data_F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 
-
-
 #2.2 GOOGL 5 Factor lines ----
-# Function in order to assign the right factors for the Train data set
+
+# Function in order to assign the right factors for the Train data set; GOOGL, 5 factor
 fitting_train_factors_GOOGL_5F <- function(train_table, test_table){
   train_regression <- lm(GOOGL - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[9]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$GOOGL
   ap <-cbind(a, p)
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; GOOGL, 4 factor
 fitting_train_factors_GOOGL_4F <- function(train_table, test_table){
   train_regression <- lm(GOOGL - RF ~ Mkt.RF + SMB + HML + RMW, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[9]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$GOOGL
   ap <-cbind(a, p)
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; GOOGL, 3 factor
 fitting_train_factors_GOOGL_3F <- function(train_table, test_table){
   train_regression <- lm(GOOGL - RF ~ Mkt.RF + SMB + HML, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[9]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$GOOGL
   ap <-cbind(a, p)
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; GOOGL, CAPM
 fitting_train_factors_GOOGL_F <- function(train_table, test_table){
   train_regression <- lm(GOOGL - RF ~ Mkt.RF, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[9]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$GOOGL
   ap <-cbind(a, p)
@@ -412,6 +425,7 @@ fitting_train_factors_GOOGL_F <- function(train_table, test_table){
   return(ap)
 } 
 
+# Function to calculate AR, CAR, t-value and P-value for 5 Factor
 GOOGL_data_5F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_GOOGL_5F(train_table1, test_table1))
@@ -465,6 +479,7 @@ GOOGL_data_5F <-function(train_table1,train_table2,train_table3,train_table4,tra
   print(paste("GOOGL:p-value 5", pt5))
   print(paste("GOOGL:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for 4 Factor
 GOOGL_data_4F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_GOOGL_4F(train_table1, test_table1))
@@ -518,6 +533,7 @@ GOOGL_data_4F <-function(train_table1,train_table2,train_table3,train_table4,tra
   print(paste("GOOGL:p-value 6", pt6))
   
 }
+# Function to calculate AR, CAR, t-value and P-value for 3 Factor
 GOOGL_data_3F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_GOOGL_3F(train_table1, test_table1))
@@ -570,6 +586,7 @@ GOOGL_data_3F <-function(train_table1,train_table2,train_table3,train_table4,tra
   print(paste("GOOGL:p-value 5", pt5))
   print(paste("GOOGL:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for CAPM
 GOOGL_data_F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_GOOGL_F(train_table1, test_table1))
@@ -623,60 +640,68 @@ GOOGL_data_F <-function(train_table1,train_table2,train_table3,train_table4,trai
   print(paste("GOOGL:p-value 6", pt6))
 }
 
+# Calling all four functions to received the P-values
 GOOGL_div_5F <- GOOGL_data_5F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 GOOGL_div_4f <- GOOGL_data_4F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 GOOGL_div_3F <- GOOGL_data_3F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 GOOGL_div_F <- GOOGL_data_F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 
-
-
 #2.3 VZ 5 Factor lines ----
-# Function in order to assign the right factors for the Train data set
+# Function in order to assign the right factors for the Train data set; VZ, 5 factor
 fitting_train_factors_VZ_5F <- function(train_table, test_table){
   train_regression <- lm(VZ - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[10]
+  print(summary(train_regression))
   p <- predict(train_regression, test_table)
   sum_p <- sum(p)
+  print(sum_p)
   a <- test_table$VZ
   ap <-cbind(a, p)
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; VZ, 4 factor
 fitting_train_factors_VZ_4F <- function(train_table, test_table){
   train_regression <- lm(VZ - RF ~ Mkt.RF + SMB + HML + RMW, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[10]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$VZ
   ap <-cbind(a, p)
-  
+  print(sum_p)
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; VZ, 3 factor
 fitting_train_factors_VZ_3F <- function(train_table, test_table){
   train_regression <- lm(VZ - RF ~ Mkt.RF + SMB + HML, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[10]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$VZ
   ap <-cbind(a, p)
-  
+  print(sum_p)
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; VZ, CAPM
 fitting_train_factors_VZ_F <- function(train_table, test_table){
   train_regression <- lm(VZ - RF ~ Mkt.RF, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[10]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$VZ
   ap <-cbind(a, p)
-  
+  print(sum_p)
   return(ap)
 } 
 
+# Function to calculate AR, CAR, t-value and P-value for 5 Factor
 VZ_data_5F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_VZ_5F(train_table1, test_table1))
@@ -730,6 +755,7 @@ VZ_data_5F <-function(train_table1,train_table2,train_table3,train_table4,train_
   print(paste("VZ:p-value 5", pt5))
   print(paste("VZ:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for 4 Factor
 VZ_data_4F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_VZ_4F(train_table1, test_table1))
@@ -782,6 +808,7 @@ VZ_data_4F <-function(train_table1,train_table2,train_table3,train_table4,train_
   print(paste("VZ:p-value 5", pt5))
   print(paste("VZ:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for 3 Factor
 VZ_data_3F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_VZ_3F(train_table1, test_table1))
@@ -834,6 +861,7 @@ VZ_data_3F <-function(train_table1,train_table2,train_table3,train_table4,train_
   print(paste("VZ:p-value 5", pt5))
   print(paste("VZ:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for CAPM
 VZ_data_F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_VZ_F(train_table1, test_table1))
@@ -887,6 +915,7 @@ VZ_data_F <-function(train_table1,train_table2,train_table3,train_table4,train_t
   print(paste("VZ:t-value 6", pt6))
 }
 
+# Calling all four functions to received the P-values
 VZ_div_5f <- VZ_data_5F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 VZ_div_4f <- VZ_data_4F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 VZ_div_3f <- VZ_data_3F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
@@ -894,12 +923,13 @@ VZ_div_F <- VZ_data_F(train_table1,train_table2,train_table3,train_table4,train_
 
 
 #2.4 BIDU 5 Factor lines ----
-# Function in order to assign the right factors for the Train data set
+# Function in order to assign the right factors for the Train data set; BIDU, 5 factor
 fitting_train_factors_BIDU_5F <- function(train_table, test_table){
   train_regression <- lm(BIDU - RF ~ Mkt.RF + SMB + HML + RMW + CMA, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[11]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   print(sum_p)
   a <- test_table$BIDU
@@ -907,11 +937,13 @@ fitting_train_factors_BIDU_5F <- function(train_table, test_table){
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; BIDU, 4 factor
 fitting_train_factors_BIDU_4F <- function(train_table, test_table){
   train_regression <- lm(BIDU - RF ~ Mkt.RF + SMB + HML + RMW, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[11]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$BIDU
   ap <-cbind(a, p)
@@ -920,11 +952,13 @@ fitting_train_factors_BIDU_4F <- function(train_table, test_table){
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; BIDU, 3 factor
 fitting_train_factors_BIDU_3F <- function(train_table, test_table){
   train_regression <- lm(BIDU - RF ~ Mkt.RF + SMB + HML, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[11]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$BIDU
   ap <-cbind(a, p)
@@ -932,11 +966,13 @@ fitting_train_factors_BIDU_3F <- function(train_table, test_table){
   
   return(ap)
 } 
+# Function in order to assign the right factors for the Train data set; BIDU, CAPM
 fitting_train_factors_BIDU_F <- function(train_table, test_table){
   train_regression <- lm(BIDU - RF ~ Mkt.RF, train_table)
   table_name <- deparse(substitute(train_table))
   column_name <-names(train_table)[11]
   p <- predict(train_regression, test_table)
+  print(summary(train_regression))
   sum_p <- sum(p)
   a <- test_table$BIDU
   ap <-cbind(a, p)
@@ -945,6 +981,7 @@ fitting_train_factors_BIDU_F <- function(train_table, test_table){
   return(ap)
 } 
 
+# Function to calculate AR, CAR, t-value and P-value for 5 Factor
 BIDU_data_5F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_BIDU_5F(train_table1, test_table1))
@@ -998,6 +1035,7 @@ BIDU_data_5F <-function(train_table1,train_table2,train_table3,train_table4,trai
   print(paste("BIDU:p-value 5", pt5))
   print(paste("BIDU:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for 4 Factor
 BIDU_data_4F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_BIDU_4F(train_table1, test_table1))
@@ -1050,6 +1088,7 @@ BIDU_data_4F <-function(train_table1,train_table2,train_table3,train_table4,trai
   print(paste("BIDU:p-value 5", pt5))
   print(paste("BIDU:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for 3 Factor
 BIDU_data_3F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_BIDU_3F(train_table1, test_table1))
@@ -1102,6 +1141,7 @@ BIDU_data_3F <-function(train_table1,train_table2,train_table3,train_table4,trai
   print(paste("BIDU:p-value 5", pt5))
   print(paste("BIDU:p-value 6", pt6))
 }
+# Function to calculate AR, CAR, t-value and P-value for CAPM
 BIDU_data_F <-function(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6){
   
   R1 <- data.frame(fitting_train_factors_BIDU_F(train_table1, test_table1))
@@ -1155,6 +1195,7 @@ BIDU_data_F <-function(train_table1,train_table2,train_table3,train_table4,train
   print(paste("BIDU:p-value 6", pt6))
 }
 
+# Calling all four functions to received the P-values
 BIDU_div_5f <- BIDU_data_5F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 BIDU_div_4f <- BIDU_data_4F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
 BIDU_div_3f <- BIDU_data_3F(train_table1,train_table2,train_table3,train_table4,train_table5,train_table6,test_table1,test_table2,test_table3,test_table4,test_table5,test_table6)
